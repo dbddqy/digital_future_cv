@@ -91,7 +91,9 @@ conda install -c conda-forge -c davidcaron pclpy
 
 ![](/pics/06.jpg)
 
-5. later if the project is updated, just go to **VCS->update project**
+5. in the left project window right click **code->Mark Directory as->Sources Root**
+
+6. later if the project is updated, just go to **VCS->update project**
 
 ## 6. Run test codes in test folder
 

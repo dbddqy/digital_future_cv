@@ -97,8 +97,8 @@ conda install -c conda-forge -c davidcaron pclpy
 
 ## 6. Run test codes in test folder
 
-Finally, we can run our test codes (in the testing folder).  
-(for the vision one, you need to connect camera to your computer via USB3 port, and to close the program just press 'q')
+Finally, you can run two test codes (in the testing folder).  
+(for the vision one, you need to connect camera to your computer via USB3 port. And to close the program you just need to press 'q')
 
 # Extra steps to configure the camera settings
 

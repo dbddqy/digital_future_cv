@@ -76,20 +76,20 @@ conda install -c conda-forge -c davidcaron pclpy
  
 1.open PyCharm, choose **Get from Vision Control**  
 
-![](\pics\02.jpg)
+![](/pics/02.jpg)
 
 2.copy the URL from the github page and create the project  
 
-![](\pics\04.jpg)
-![](\pics\03.jpg)
+![](/pics/04.jpg)
+![](/pics/03.jpg)
 
 3.go to **file->settings->Project:xxx->Project Interpreter**, click upper right sign to add new intepreter  
 
-![](\pics\05.jpg)
+![](/pics/05.jpg)
 
 4.choose Conda **Environment->Exsiting environment** and select our configured env "digital_future"  
 
-![](\pics\06.jpg)
+![](/pics/06.jpg)
 
 5.later if the project is updated, just go to **VCS->update project**
 
@@ -102,4 +102,4 @@ Finally, we can run our test codes (in the testing folder).
 
 open Realsense viewer and configure the Depth Unit to 0.0001 to get the highest accuracy
 
-![](\pics\01.jpg)
+![](/pics/01.jpg)

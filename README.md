@@ -6,7 +6,7 @@ Environment: Win10
 2. create python3.7 environment in Anaconda
 3. install **RealSenseSDK** and **PCL**
 4. install python packages: **opencv**, **scipy**, **pyrealsense2**, **pclpy**... 
-5. download the python codes, create the project and configure the interpreter
+5. clone the project and configure the interpreter
 6. run test codes in test folder
 
 ## 1. Install Anaconda2 (2 or 3 doesn't matter)
@@ -70,8 +70,28 @@ pclpy:
 conda install -c conda-forge -c davidcaron pclpy
 ```
 
-## 5. Download the python codes, create the project and configure the interpreter
+## 5. Clone the project and configure the interpreter
 
-# Extra steps configuring the camera settings
+### **(recommend to use PyCharm as our IDE)**
+ 
+1. open PyCharm, choose **Get from Vision Control**  
+![](\pics\02.jpg)
+2. copy the URL from the github page and create the project  
+![](\pics\04.jpg)
+![](\pics\03.jpg)
+3. go to **file->settings->Project:xxx->Project Interpreter**, click upper right sign to add new intepreter  
+![](\pics\05.jpg)
+4. choose Conda **Environment->Exsiting environment** and select our configured env "digital_future"  
+![](\pics\06.jpg)
+5. later if the project is updated, just go to **VCS->update project**
 
-[]("\pics\01.jpg")
+## 6. Run test codes in test folder
+
+Finally, we can run our test codes (in the testing folder).  
+(for the vision one, you need to connect camera to your computer via USB3 port, and to close the program just press 'q')
+
+# Extra steps to configure the camera settings
+
+* open Realsense viewer and configure the Depth Unit to 0.0001 to get the highest accuracy
+
+* ![](\pics\01.jpg)

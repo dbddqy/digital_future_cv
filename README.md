@@ -70,6 +70,11 @@ pclpy:
 conda install -c conda-forge -c davidcaron pclpy
 ```
 
+matplotlib:
+```
+conda install matplotlib
+```
+
 ## 5. Clone the project and configure the interpreter
 
 ### **(recommend to use PyCharm as our IDE)**

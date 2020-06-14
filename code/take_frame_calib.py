@@ -44,6 +44,3 @@ while True:
 print("%d frames saved. Data:" % frames_saved)
 print(poses_str)
 d415.close()
-
-# a = np.array([1., 2, 34.])
-# a.

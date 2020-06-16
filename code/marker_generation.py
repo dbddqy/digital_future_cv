@@ -15,11 +15,7 @@ cv2.resizeWindow("color", 960, 540)
 d415 = rs.D415()
 
 while cv2.waitKey(50) != ord('q'):
-    color = d415.get_frame_color()
-    corners, ids, _ = cv2.aruco.detectMarkers(color, dic)
-    if len(corners) != 0:
-        for i in range(len(corners)):
-            color = cv2.aruco.drawDetectedMarkers(color, corners, ids)
-    cv2.imshow("color", color)
+    corners, ids, color, color_drawn = d415.detect_aruco()
+    cv2.imshow("color", color_drawn)
 
 d415.close()

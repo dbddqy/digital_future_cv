@@ -33,6 +33,8 @@ class D415:
             for j in range(4):
                 circles_points.append([i*0.02, j*0.04+(i%2)*0.02, 0.0])
         self.circles_points = np.asarray(circles_points, dtype=np.float32)
+        # aruco related
+        self.aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
 
     def get_frames(self):
         # align color frame to depth frame
@@ -66,5 +68,32 @@ class D415:
             pose[0:3, 3:4] = tvec
         return is_found, color, color_drawn, pose
 
+    def detect_aruco(self):
+        color = self.get_frame_color()
+        color_drawn = color.copy()
+        corners, ids, _ = cv2.aruco.detectMarkers(color_drawn, self.aruco_dict)
+        cv2.aruco.drawDetectedMarkers(color_drawn, corners, ids)
+        return corners, ids, color, color_drawn
+
+    def detect_aruco_stuttgart(self):
+        color = self.get_frame_color()
+        color_drawn = color.copy()
+        corners, ids, _ = cv2.aruco.detectMarkers(color_drawn, cv2.aruco.custom_dictionary(10, 6))
+        cv2.aruco.drawDetectedMarkers(color_drawn, corners, ids)
+        return corners, ids, color, color_drawn
+
     def close(self):
         self.pipeline.stop()
+
+# utility functions
+
+
+def window_setting(config):
+    if config == "color":
+        cv2.namedWindow("color", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow("color", 960, 540)
+    elif config == "color+depth":
+        cv2.namedWindow("color", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow("color", 960, 540)
+        cv2.namedWindow("depth", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow("depth", 960, 540)

@@ -17,7 +17,7 @@ while True:
     if key == ord('s'):
         isToSave = True
     # fetch data
-    corners, ids, color, color_drawn = d415.detect_aruco_stuttgart()
+    corners, ids, color, color_drawn = d415.detect_aruco()
     cv2.imshow("color", color_drawn)
     # save data
     if isToSave:

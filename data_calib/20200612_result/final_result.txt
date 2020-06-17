@@ -1,3 +1,4 @@
 -0.05000084  0.06734923 -2.07403177  0.04138613  0.03814191  0.16025237
 
-#position error: around 1mm
+# [rvec tvec]
+# position error: around 1mm

@@ -25,13 +25,7 @@ c2o = np.loadtxt("..\\data_calib\\20200612_c2o.txt")
 b2e_pos = np.loadtxt("..\\data_calib\\20200612_b2e_pos.txt") / 1000.
 b2e_ori = np.loadtxt("..\\data_calib\\20200612_b2e_ori.txt")
 
-for i in range(b2e_ori.shape[0]):
-    temp = b2e_ori[i, 0]
-    b2e_ori[i, 0] = b2e_ori[i, 1]
-    b2e_ori[i, 1] = b2e_ori[i, 2]
-    b2e_ori[i, 2] = b2e_ori[i, 3]
-    b2e_ori[i, 3] = temp
-# print(b2e_ori)
+b2e_ori = opt.swap_quats(b2e_ori)
 
 num_data = c2o.shape[0]
 
@@ -82,7 +76,7 @@ for num in range(5, num_data):
                        [-0.866, -0.5, 0., 0.010413],
                        [0., 0., 1., 0.160870],
                        [0., 0., 0., 1.]])
-    x0 = opt.rvec__t_4_4(x0_mat)
+    x0 = opt.rvec6__t_4_4(x0_mat)
     ls = opt.least_squares(residual, x0, jac="3-point")
     y0_plot.append(ls.x[0])
     y1_plot.append(ls.x[1])

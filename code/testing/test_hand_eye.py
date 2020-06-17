@@ -54,7 +54,7 @@ x0_mat = np.array([[-0.5, 0.866, 0., 0.020806],
 #                    [0., -0.866, -0.5, 0.020806],
 #                    [1., 0., 0., 0.010413],
 #                    [0., 0., 0., 1.]])
-x0 = opt.rvec__t_4_4(x0_mat)
+x0 = opt.rvec6__t_4_4(x0_mat)
 print(x0)
 ls = opt.least_squares(residual, x0, jac="3-point")
 

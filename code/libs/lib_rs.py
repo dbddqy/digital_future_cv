@@ -25,7 +25,21 @@ class D415:
         self.C = np.array([[self.fx, 0., self.ppx],
                            [0., self.fy, self.ppy],
                            [0., 0., 1.]], dtype=np.float32)
-
+        self.C_ext = np.array([[self.fx, 0., self.ppx, 0.],
+                               [0., self.fy, self.ppy, 0.],
+                               [0., 0., 1., 0.]], dtype=np.float32)
+        # the camera from Shanghai
+        self.ppx_r = 9.6591498e+02
+        self.ppy_r = 5.4094659e+02
+        self.fx_r = 1.3821929e+03
+        self.fy_r = 1.3783481e+03
+        self.C_r = np.array([[self.fx_r, 0., self.ppx_r],
+                             [0., self.fy_r, self.ppy_r],
+                             [0., 0., 1.]], dtype=np.float32)
+        self.C_ext_r = np.array([[self.fx_r, 0., self.ppx_r, 0.],
+                                 [0., self.fy_r, self.ppy_r, 0.],
+                                 [0., 0., 1., 0.]], dtype=np.float32)
+        self.coeffs_r = np.array([0., 0., 0., 0., 0.]).reshape([5, 1])
         # circle board related
         self.circles_size = (4, 11)
         circles_points = []
@@ -97,3 +111,22 @@ def window_setting(config):
         cv2.resizeWindow("color", 960, 540)
         cv2.namedWindow("depth", cv2.WINDOW_NORMAL)
         cv2.resizeWindow("depth", 960, 540)
+
+
+def aruco_dict():
+    return cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
+
+
+def coeffs():
+    return np.array([0., 0., 0., 0., 0.]).reshape([5, 1])
+
+
+def P(size, index):
+    if index == 0:
+        return np.array([[-0.5*size], [0.5*size], [0.], [1.]])
+    if index == 1:
+        return np.array([[0.5*size], [0.5*size], [0.], [1.]])
+    if index == 2:
+        return np.array([[0.5*size], [-0.5*size], [0.], [1.]])
+    if index == 3:
+        return np.array([[-0.5*size], [-0.5*size], [0.], [1.]])

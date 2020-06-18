@@ -55,7 +55,9 @@ def residual(x):
     # i-th photo  j-th marker  k-th corner
     for i in range(n):
         img = cv2.imread(path_img % i)
-        corners, ids, _ = cv2.aruco.detectMarkers(img, rs.aruco_dict())
+        param = cv2.aruco.DetectorParameters_create()
+        param.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_SUBPIX
+        corners, ids, _ = cv2.aruco.detectMarkers(img, rs.aruco_dict(), parameters=param)
         m = len(corners)  # num of markers
         b2w = opt.t_4_4__rvec6(x)
         for j in range(m):

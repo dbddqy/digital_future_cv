@@ -21,9 +21,9 @@ def residual(x):
 # load data
 # ------------------------
 
-c2o = np.loadtxt("..\\data_calib\\20200612_c2o.txt")
-b2e_pos = np.loadtxt("..\\data_calib\\20200612_b2e_pos.txt") / 1000.
-b2e_ori = np.loadtxt("..\\data_calib\\20200612_b2e_ori.txt")
+c2o = np.loadtxt("..\\data_calib\\20200620_c2o.txt")
+b2e_pos = np.loadtxt("..\\data_calib\\20200620_b2e_pos.txt") / 1000.
+b2e_ori = np.loadtxt("..\\data_calib\\20200620_b2e_ori.txt")
 
 b2e_ori = opt.swap_quats(b2e_ori)
 
@@ -99,6 +99,9 @@ plt.plot(x_plot, y5_plot)
 plt.show()
 
 print(ls.x)
+
+np.save("c2e", opt.inv(opt.t_4_4__rvec6(ls.x)))
+
 print(ls.cost)
 print(ls.optimality)
 

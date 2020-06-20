@@ -1,5 +1,6 @@
 import pyrealsense2 as rs
 import cv2
+# import pclpy
 import numpy as np
 
 
@@ -52,11 +53,14 @@ class D415:
         circles_points_2 = []
         for i in range(7):
             for j in range(7):
-                circles_points_2.append([i * 0.009, j * 0.009, 0.0])
+                circles_points_2.append([i * 0.03, j * 0.03, 0.0])
         self.circles_points_2 = np.asarray(circles_points_2, dtype=np.float32)
         # aruco related
         self.aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
 
+    # ==================================
+    # 2d functionality
+    # ==================================
     def get_frames(self):
         # align color frame to depth frame
         frames = self.pipeline.wait_for_frames()
@@ -116,6 +120,16 @@ class D415:
         corners, ids, _ = cv2.aruco.detectMarkers(color_drawn, cv2.aruco.custom_dictionary(10, 6))
         cv2.aruco.drawDetectedMarkers(color_drawn, corners, ids)
         return corners, ids, color, color_drawn
+
+    # ==================================
+    # 3d functionality
+    # ==================================
+    def construct_point(self, u, v, d):
+        point = np.zeros([3, ])
+        point[0] = (u - self.ppx_r) * d / self.fx_r
+        point[1] = (v - self.ppy_r) * d / self.fy_r
+        point[2] = d
+        return point
 
     def close(self):
         self.pipeline.stop()

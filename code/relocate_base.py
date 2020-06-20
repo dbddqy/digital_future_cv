@@ -32,7 +32,7 @@ w2k = opt.t_4_4s__rvecs6(np.load("..\\data_locate_base\\w2k.npy"))
 print("w2k:")
 for i in range(len(w2k)):
     print(w2k[i])
-    np.savetxt(("w2k_%d.txt" % i), w2k[i].reshape([16, 1]))
+    np.savetxt(("..\\data_locate_base\\w2k_%d.txt" % i), w2k[i].reshape([16, 1]))
 
 
 # --------------------------------

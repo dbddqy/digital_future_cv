@@ -54,7 +54,7 @@ d415 = rs.D415()
 # load data
 # ------------------------
 
-path = "..\\data_2D\\20200621_marker\\marker_%d.png"
+path = "..\\data_2D\\20200622_marker\\marker_%d.png"
 corners_all, ids_all = [], []
 count_marker = 0
 for i in range(n):
@@ -62,9 +62,7 @@ for i in range(n):
     param = cv2.aruco.DetectorParameters_create()
     param.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_SUBPIX
     corners, ids, _ = cv2.aruco.detectMarkers(color, rs.aruco_dict(), parameters=param)
-    # if i == 0:
-    #     cv2.aruco.drawDetectedMarkers(color, corners, ids)
-    #     cv2.imwrite("test_sub.png", color)
+    # cv2.aruco.drawDetectedMarkers(color, corners, ids)
     # cv2.imshow("color", color)
     # cv2.waitKey()
     corners_all.append(corners)

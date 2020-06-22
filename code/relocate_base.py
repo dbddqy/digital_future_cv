@@ -17,6 +17,8 @@ print(c)
 c2e = np.load("..\\data_locate_base\\c2e.npy")
 print("c2e:")
 print(c2e)
+print("e2c:")
+print(opt.inv(c2e))
 
 # e2b [4, 4] * number of photos
 b2e_pos = np.loadtxt("..\\data_locate_base\\b2e_pos.txt") / 1000.

@@ -21,9 +21,9 @@ def residual(x):
 # load data
 # ------------------------
 
-c2o = np.loadtxt("..\\data_calib\\20200620_c2o.txt")
-b2e_pos = np.loadtxt("..\\data_calib\\20200620_b2e_pos.txt") / 1000.
-b2e_ori = np.loadtxt("..\\data_calib\\20200620_b2e_ori.txt")
+c2o = np.loadtxt("..\\data_calib\\20200623_c2o.txt")
+b2e_pos = np.loadtxt("..\\data_calib\\20200623_b2e_pos.txt") / 1000.
+b2e_ori = np.loadtxt("..\\data_calib\\20200623_b2e_ori.txt")
 
 b2e_ori = opt.swap_quats(b2e_ori)
 

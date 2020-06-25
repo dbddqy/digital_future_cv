@@ -21,9 +21,9 @@ def residual(x):
 # load data
 # ------------------------
 
-c2o = np.loadtxt("..\\data_calib\\20200623_c2o.txt")
-b2e_pos = np.loadtxt("..\\data_calib\\20200623_b2e_pos.txt") / 1000.
-b2e_ori = np.loadtxt("..\\data_calib\\20200623_b2e_ori.txt")
+c2o = np.loadtxt("..\\data_calib\\20200625_c2o.txt")
+b2e_pos = np.loadtxt("..\\data_calib\\20200625_b2e_pos.txt") / 1000.
+b2e_ori = np.loadtxt("..\\data_calib\\20200625_b2e_ori.txt")
 
 b2e_ori = opt.swap_quats(b2e_ori)
 
@@ -72,9 +72,9 @@ y5_plot = []
 for num in range(5, num_data):
     A = A_whole[0:num]
     B = B_whole[0:num]
-    x0_mat = np.array([[-0.5, 0.866, 0., 0.020806],
-                       [-0.866, -0.5, 0., 0.010413],
-                       [0., 0., 1., 0.160870],
+    x0_mat = np.array([[-0.46491281, 0.88355481, 0.05645332, 0.04465462],
+                       [-0.88535499, -0.4638495, -0.03146717, 0.04170271],
+                       [-0.00161712, -0.06461072, 0.99790923, 0.156906],
                        [0., 0., 0., 1.]])
     x0 = opt.rvec6__t_4_4(x0_mat)
     ls = opt.least_squares(residual, x0, jac="3-point")

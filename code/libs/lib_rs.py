@@ -56,7 +56,7 @@ class D415:
                 circles_points_2.append([i * 0.03, j * 0.03, 0.0])
         self.circles_points_2 = np.asarray(circles_points_2, dtype=np.float32)
         # aruco related
-        self.aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
+        self.aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_250)
 
     # ==================================
     # 2d functionality
@@ -149,7 +149,7 @@ def window_setting(config):
 
 
 def aruco_dict():
-    return cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
+    return cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_250)
 
 
 def coeffs():

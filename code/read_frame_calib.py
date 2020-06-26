@@ -6,7 +6,7 @@ path = "..\\data_2D\\circles\\circles_%d.png"
 d415 = rs.D415()
 poses_str = ""
 
-for i in range(50):
+for i in range(80):
     color = cv2.imread(path % i)
     is_found, centers = cv2.findCirclesGrid(color, d415.circles_size_2, flags=cv2.CALIB_CB_SYMMETRIC_GRID)
     pose = np.eye(4, dtype=np.float32)

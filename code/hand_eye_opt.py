@@ -38,9 +38,6 @@ for i in range(num_data):
     b2e[i] = opt.t_4_4__quat(b2e_ori[i], b2e_pos[i]).reshape([16, ])
 # print(c2o[46].reshape([16, 1]))
 
-for i in range(16):
-    print(b2e[14, i])
-
 # print("=========================")
 # for i in range(num_data):
 #     for j in range(16):

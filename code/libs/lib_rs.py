@@ -86,7 +86,7 @@ class D415:
         pose = np.eye(4, dtype=np.float32)
         if is_found:
             cv2.drawChessboardCorners(color_drawn, self.circles_size, centers, is_found)
-            _, rvec, tvec = cv2.solvePnP(self.circles_points, centers, self.C, self.coeffs)
+            _, rvec, tvec = cv2.solvePnP(self.circles_points, centers, self.C_r, self.coeffs_r)
             cv2.aruco.drawAxis(color_drawn, self.C, self.coeffs, rvec, tvec, 0.12)
             # calculate pose
             pose[0:3, 0:3] = cv2.Rodrigues(rvec)[0]
@@ -112,6 +112,9 @@ class D415:
         color_drawn = color.copy()
         corners, ids, _ = cv2.aruco.detectMarkers(color_drawn, self.aruco_dict)
         cv2.aruco.drawDetectedMarkers(color_drawn, corners, ids)
+        for i in range(len(corners)):
+            rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corners[i], 0.2, self.C_r, self.coeffs_r)
+            cv2.aruco.drawAxis(color_drawn, self.C_r, self.coeffs_r, rvec, tvec, 0.2)
         return corners, ids, color, color_drawn
 
     def detect_aruco_stuttgart(self):

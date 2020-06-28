@@ -51,15 +51,31 @@ x0 = opt.rvec6__t_4_4(opt.inv(e2b[0]).dot(opt.inv(c2e)).dot(c2k).dot(opt.inv(w2k
 print(x0)
 
 
+# --------------------------------
+# get all the marker information
+# --------------------------------
+corners_all, ids_all = [], []
+for i in range(n):
+    img = cv2.imread(path_img % i)
+    param = cv2.aruco.DetectorParameters_create()
+    param.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_APRILTAG
+    corners, ids, _ = cv2.aruco.detectMarkers(img, rs.aruco_dict(), parameters=param)
+
+    cv2.aruco.drawDetectedMarkers(img, corners, ids)
+    cv2.imshow("color", img)
+    cv2.waitKey()
+
+    corners_all.append(corners)
+    ids_all.append(ids)
+
+
 def residual(x):
     global c, c2e, e2b, w2k, path_img, size, n
     res = []
     # i-th photo  j-th marker  k-th corner
     for i in range(n):
-        img = cv2.imread(path_img % i)
-        param = cv2.aruco.DetectorParameters_create()
-        param.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_SUBPIX
-        corners, ids, _ = cv2.aruco.detectMarkers(img, rs.aruco_dict(), parameters=param)
+        corners = corners_all[i]
+        ids = ids_all[i]
         m = len(corners)  # num of markers
         b2w = opt.t_4_4__rvec6(x)
         for j in range(m):

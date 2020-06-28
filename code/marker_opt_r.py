@@ -10,8 +10,8 @@ import libs.lib_optimization as opt
 # T(W->K) (6*m) m = 2
 # ------------------------
 
-n = 5  # 5 photos
-m = 2  # 2 markers
+n = 9  # 8 photos
+m = 3  # 3 markers
 
 # ---------------------------------
 # cost function: x: [c2w_rvec
@@ -54,17 +54,22 @@ d415 = rs.D415()
 # load data
 # ------------------------
 
-path = "..\\data_2D\\20200622_marker\\marker_%d.png"
+path = "..\\data_2D\\20200628_marker\\marker_%d.png"
 corners_all, ids_all = [], []
 count_marker = 0
 for i in range(n):
     color = cv2.imread(path % i)
     param = cv2.aruco.DetectorParameters_create()
-    param.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_SUBPIX
+    param.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_APRILTAG
     corners, ids, _ = cv2.aruco.detectMarkers(color, rs.aruco_dict(), parameters=param)
-    # cv2.aruco.drawDetectedMarkers(color, corners, ids)
-    # cv2.imshow("color", color)
-    # cv2.waitKey()
+    cv2.aruco.drawDetectedMarkers(color, corners, ids)
+    cv2.imshow("color", color)
+    cv2.waitKey()
+    # corner refinement
+    # gray = cv2.cvtColor(color, cv2.COLOR_BGR2GRAY)
+    # criteria = (cv2.TERM_CRITERIA_EPS + cv2.TermCriteria_COUNT, 40, 0.001)
+    # for j in range(len(corners)):
+    #     cv2.cornerSubPix(gray, corners[j], (3, 3), (-1, -1), criteria)
     corners_all.append(corners)
     ids_all.append(ids)
     count_marker += len(ids)
@@ -85,9 +90,10 @@ x0 = np.hstack((c2w, w2k))
 # x0.extend([0., 0., 1.57, 0.42, 1.23, 0.])
 # x0.extend([0., 0., 3.14, -0.98, 0.16, 0.])
 # x0 = np.array(x0)
-ls = opt.least_squares(residual, x0, jac="2-point")
+ls = opt.least_squares(residual, x0, jac="3-point")
 
 print(ls.x[6*n: 6*n+6])
+print(ls.x[6*n+6: 6*n+12])
 # print(ls.x[6*n+18: 6*n+24])
 print("------------------")
 print(ls.cost)

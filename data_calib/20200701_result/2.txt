@@ -1,0 +1,3 @@
+Ceres Solver Report: Iterations: 2, Initial cost: 1.790269e-01, Final cost: 1.730344e-01, Termination: CONVERGENCE
+estimated translation = 0.0440911 0.0464408 0.160295 
+estimated R = -0.466827 -0.884343 -0.00316626 0.88315 -0.466005 -0.0537166 0.0460284 -0.0278726 0.998551 

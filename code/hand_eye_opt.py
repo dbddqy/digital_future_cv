@@ -71,6 +71,7 @@ np.random.shuffle(shuffle_idx)
 c2o_ext = c2o_ext[shuffle_idx]
 b2e_pos_ext = b2e_pos_ext[shuffle_idx]
 b2e_ori_ext = b2e_ori_ext[shuffle_idx]
+
 # ------------------------
 # prepare b2e ext
 # ------------------------
@@ -79,7 +80,6 @@ b2e_ori_ext = opt.swap_quats(b2e_ori_ext)
 b2e_ext = np.zeros(c2o_ext.shape)
 for i in range(c2o_ext.shape[0]):
     b2e_ext[i] = opt.t_4_4__quat(b2e_ori_ext[i], b2e_pos_ext[i]).reshape([16, ])
-
 
 # ------------------------
 # load data ext2
@@ -102,8 +102,6 @@ b2e_ori_ext2 = opt.swap_quats(b2e_ori_ext2)
 b2e_ext2 = np.zeros(c2o_ext2.shape)
 for i in range(c2o_ext2.shape[0]):
     b2e_ext2[i] = opt.t_4_4__quat(b2e_ori_ext2[i], b2e_pos_ext2[i]).reshape([16, ])
-
-
 
 # -------------------------
 # solve AX = XB

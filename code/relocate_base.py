@@ -87,7 +87,7 @@ def residual(x):
     return np.array(res)
 
 
-ls = opt.least_squares(residual, x0, jac="2-point")
+ls = opt.least_squares(residual, x0, jac="3-point")
 print("final b2w: ")
 print(ls.x)
 print("final cost: %f" % ls.cost)

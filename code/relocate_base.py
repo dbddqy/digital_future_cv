@@ -47,7 +47,7 @@ img = cv2.imread(path_img % 0)
 corners, ids, _ = cv2.aruco.detectMarkers(img, rs.aruco_dict())
 rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corners[0], size, c[0:3, 0:3], rs.coeffs())
 c2k = opt.t_4_4__rvec(rvec.reshape([3, ]), tvec.reshape([3, ]))
-x0 = opt.rvec6__t_4_4(opt.inv(e2b[0]).dot(opt.inv(c2e)).dot(c2k).dot(opt.inv(w2k[ids[0, 0]])))
+x0 = opt.rvec6__t_4_4(opt.inv(e2b[0]).dot(opt.inv(c2e)).dot(c2k).dot(opt.inv(w2k[opt.id_new(ids[0, 0])])))
 print(x0)
 
 
@@ -79,7 +79,7 @@ def residual(x):
         m = len(corners)  # num of markers
         b2w = opt.t_4_4__rvec6(x)
         for j in range(m):
-            index = ids[j, 0]
+            index = opt.id_new(ids[j, 0])
             for k in range(4):
                 p = c.dot(c2e).dot(e2b[i]).dot(b2w).dot(w2k[index]).dot(rs.P(size, k))
                 res.append(p[0, 0] / p[2, 0] - corners[j][0, k, 0])

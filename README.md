@@ -116,13 +116,46 @@ Finally, you can run two test codes (in the testing folder).
 
 ![](/pics/01.jpg)
 
+# Switch to New Branch
+
+1. **VCS->update project**
+
+2. at the bottom right, select **Git:XXX->Checkout Tag or Revision**   
+
+![](/pics/switch_branch_01.png)
+
+3. type in **origin/organized_20200728**, press ok
+
+![](/pics/switch_branch_02.png)
+
 # Functional Scripts
 
 1. take_frame_calib.py  
 for collecting data of circle board in order to perform hand-eye calibration
 
 2. hand_eye_opt.py  
-for solving c2e (camera to end transformation) from collected data.
+for solving c2e (camera to end transformation) from collected data.  
+**Output: c2e.npy, which needs to be copied into /data_locate_base folder**  
+**Config file: config/config_hand_eye.yml**  
 
 3. take_frame_marker.py  
 for collecting data of aruco markers in order to relocate robot base
+
+4. marker_opt_initial_guess.py  
+initial guess for marker poses  
+**Output: c2w_init.py, w2k_init.py**  
+**Config file: config/config_marker.yml**  
+
+5. marker_opt.py  
+need initial guess from last step  
+**Output: w2k.npy, which needs to be copied into /data_locate_base folder**
+
+6. relocate_base.py  
+need:
+    - c2e.npy (result of hand_eye calibration)
+    - w2k.npy (result of hand_eye calibration)
+    - b2e_pos.txt (date read from robot)
+    - b2e_ori.txt (date read from robot)
+    - a few images (marker_0.png - marker_x.png)
+
+**Output: result.txt, w2k_0.txt - w2k_xx.txt**

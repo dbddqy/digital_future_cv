@@ -1,8 +1,8 @@
 import numpy as np
 import pclpy
-import libs.lib_rs as rs
+import libs.lib_rs_old as rs
 import cv2
-import libs.lib_optimization as opt
+import libs.lib_frame as opt
 
 path_color = "..\\..\\data_3D\\wood_color_%d.png"
 path_depth = "..\\..\\data_3D\\wood_depth_%d.png"

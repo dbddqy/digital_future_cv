@@ -1,0 +1,7 @@
+# marker
+path: "..\\data_2D\\20200703_marker+\\"
+num_photos: 76
+num_markers: 14
+marker_size: 0.2  # size in meter
+reorder: true
+reorder_indices_list: [53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 67, 68, 69]

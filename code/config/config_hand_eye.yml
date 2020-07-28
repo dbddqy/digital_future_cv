@@ -1,0 +1,5 @@
+# hand-eye
+c2o_path: "..\\data_calib\\20200628_c2o.txt"
+b2e_pos_path: "..\\data_calib\\20200628_b2e_pos.txt"
+b2e_ori_path: "..\\data_calib\\20200628_b2e_ori.txt"
+skip_indices: [2, 3, 16, 17, 30, 38, 39, 57]

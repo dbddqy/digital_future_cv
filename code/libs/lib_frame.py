@@ -1,7 +1,5 @@
-# import scipy as sp
-from scipy.optimize import least_squares
 from scipy.spatial.transform import Rotation as R
-
+from scipy.optimize import least_squares
 import numpy as np
 
 
@@ -94,10 +92,3 @@ def rvecs6__t_4_4s(t_4_4s):
     for i in range(len(t_4_4s)):
         vecs[i] = rvec6__t_4_4(t_4_4s[i])
     return vecs
-
-
-def id_new(id):
-    if 53 <= id <= 63:
-        return id - 53
-    if 67 <= id <= 69:
-        return id - 56

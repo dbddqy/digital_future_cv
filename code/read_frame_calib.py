@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-import libs.lib_rs as rs
+import libs.lib_rs_old as rs
 
 path = "..\\data_2D\\circles\\circles_%d.png"
 d415 = rs.D415()

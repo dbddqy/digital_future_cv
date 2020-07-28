@@ -75,6 +75,11 @@ matplotlib:
 conda install matplotlib
 ```
 
+pyyaml:
+```
+conda install -c anaconda pyyaml
+```
+
 ## 5. Clone the project and configure the interpreter
 
 ### **(recommend to use PyCharm as our IDE)**
@@ -110,3 +115,14 @@ Finally, you can run two test codes (in the testing folder).
 1. open Realsense viewer and configure the Depth Unit to 0.0001 to get the highest accuracy
 
 ![](/pics/01.jpg)
+
+# Functional Scripts
+
+1. take_frame_calib.py  
+for collecting data of circle board in order to perform hand-eye calibration
+
+2. hand_eye_opt.py  
+for solving c2e (camera to end transformation) from collected data.
+
+3. take_frame_marker.py  
+for collecting data of aruco markers in order to relocate robot base

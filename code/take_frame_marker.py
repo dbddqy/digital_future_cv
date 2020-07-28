@@ -7,7 +7,6 @@ d415 = rs.D415()
 frames_saved = 0
 path = "..\\data_2D\\marker_%d.png"
 path_drawn = "..\\data_2D\\marker_drawn_%d.png"
-poses_str = ""
 while True:
     # key configs
     key = cv2.waitKey(50)

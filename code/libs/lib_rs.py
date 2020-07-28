@@ -1,67 +1,66 @@
 import pyrealsense2 as rs
+import libs.lib_frame as f
 import cv2
-# import pclpy
 import numpy as np
+import yaml
 
 
 class D415:
-    def __init__(self):
-        self.pipeline = rs.pipeline()
-        self.align = rs.align(rs.stream.color)
-        config = rs.config()
-        config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)
-        config.enable_stream(rs.stream.color, 1920, 1080, rs.format.bgr8, 30)
-        cfg = self.pipeline.start(config)
-
+    def __init__(self, config_path="config\\config.yml"):
+        self.is_connected = True
+        try:
+            self.pipeline = rs.pipeline()
+            self.align = rs.align(rs.stream.color)
+            config = rs.config()
+            config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)
+            config.enable_stream(rs.stream.color, 1920, 1080, rs.format.bgr8, 30)
+            cfg = self.pipeline.start(config)
+        except:
+            print("camera not connected.")
+            self.is_connected = False
         # set intrinsics
-        profile = cfg.get_stream(rs.stream.color)
-        intrinsics = profile.as_video_stream_profile().get_intrinsics()
-        self.width = intrinsics.width
-        self.height = intrinsics.height
-        self.ppx = intrinsics.ppx
-        self.ppy = intrinsics.ppy
-        self.fx = intrinsics.fx
-        self.fy = intrinsics.fy
-        self.coeffs = np.asarray(intrinsics.coeffs, dtype=np.float32).reshape([5, 1])
+        with open(config_path, 'r') as file:
+            conf = yaml.safe_load(file.read())
+        # profile = cfg.get_stream(rs.stream.color)
+        # intrinsics = profile.as_video_stream_profile().get_intrinsics()
+        self.width = conf["width"]
+        self.height = conf["height"]
+        self.ppx = conf["ppx"]
+        self.ppy = conf["ppy"]
+        self.fx = conf["fx"]
+        self.fy = conf["fy"]
+        self.coeffs = np.asarray(conf["coeffs"], dtype=np.float32).reshape([5, 1])
         self.C = np.array([[self.fx, 0., self.ppx],
                            [0., self.fy, self.ppy],
                            [0., 0., 1.]], dtype=np.float32)
         self.C_ext = np.array([[self.fx, 0., self.ppx, 0.],
                                [0., self.fy, self.ppy, 0.],
                                [0., 0., 1., 0.]], dtype=np.float32)
-        # the camera from Shanghai
-        self.ppx_r = 9.6591498e+02
-        self.ppy_r = 5.4094659e+02
-        self.fx_r = 1.3821929e+03
-        self.fy_r = 1.3783481e+03
-        self.C_r = np.array([[self.fx_r, 0., self.ppx_r],
-                             [0., self.fy_r, self.ppy_r],
-                             [0., 0., 1.]], dtype=np.float32)
-        self.C_ext_r = np.array([[self.fx_r, 0., self.ppx_r, 0.],
-                                 [0., self.fy_r, self.ppy_r, 0.],
-                                 [0., 0., 1., 0.]], dtype=np.float32)
-        self.coeffs_r = np.array([0., 0., 0., 0., 0.]).reshape([5, 1])
-        # circle board related 01
-        self.circles_size = (4, 11)
+
+        # circle board related
+        self.symmetric = conf["symmetric"]
+        num_circle_x = conf["num_circle_x"]
+        num_circle_y = conf["num_circle_y"]
+        self.circle_size = conf["circle_size"]
+        self.circle_board_size = (num_circle_x, num_circle_y)
         circles_points = []
-        for i in range(11):
-            for j in range(4):
-                circles_points.append([i*0.02, j*0.04+(i%2)*0.02, 0.0])
+        for i in range(num_circle_y):
+            for j in range(num_circle_x):
+                if self.symmetric:
+                    circles_points.append([i * self.circle_size, j * self.circle_size, 0.0])
+                else:
+                    circles_points.append([i*self.circle_size, j*self.circle_size*2.+(i%2)*self.circle_size, 0.0])
         self.circles_points = np.asarray(circles_points, dtype=np.float32)
-        # circle board related 02
-        self.circles_size_2 = (7, 7)
-        circles_points_2 = []
-        for i in range(7):
-            for j in range(7):
-                circles_points_2.append([i * 0.03, j * 0.03, 0.0])
-        self.circles_points_2 = np.asarray(circles_points_2, dtype=np.float32)
         # aruco related
         self.aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_250)
+        self.marker_size = conf["marker_size"]
 
     # ==================================
     # 2d functionality
     # ==================================
     def get_frames(self):
+        if not self.is_connected:
+            raise Exception("camera not connected.")
         # align color frame to depth frame
         frames = self.pipeline.wait_for_frames()
         frames = self.align.process(frames)
@@ -74,6 +73,8 @@ class D415:
         return color_mat, depth_mat
 
     def get_frame_color(self):
+        if not self.is_connected:
+            raise Exception("camera not connected.")
         frames = self.pipeline.wait_for_frames()
         color_rs = frames.get_color_frame()
         color_mat = np.asanyarray(color_rs.as_frame().get_data())
@@ -82,26 +83,16 @@ class D415:
     def detect_circle_board(self):
         color = self.get_frame_color()
         color_drawn = color.copy()
-        is_found, centers = cv2.findCirclesGrid(color, self.circles_size, flags=cv2.CALIB_CB_ASYMMETRIC_GRID)
+        if self.symmetric:
+            flag = cv2.CALIB_CB_SYMMETRIC_GRID
+        else:
+            flag = cv2.CALIB_CB_ASYMMETRIC_GRID
+        is_found, centers = cv2.findCirclesGrid(color, self.circle_board_size, flags=flag)
         pose = np.eye(4, dtype=np.float32)
         if is_found:
-            cv2.drawChessboardCorners(color_drawn, self.circles_size, centers, is_found)
-            _, rvec, tvec = cv2.solvePnP(self.circles_points, centers, self.C_r, self.coeffs_r)
-            cv2.aruco.drawAxis(color_drawn, self.C, self.coeffs, rvec, tvec, 0.12)
-            # calculate pose
-            pose[0:3, 0:3] = cv2.Rodrigues(rvec)[0]
-            pose[0:3, 3:4] = tvec
-        return is_found, color, color_drawn, pose
-
-    def detect_circle_board_2(self):
-        color = self.get_frame_color()
-        color_drawn = color.copy()
-        is_found, centers = cv2.findCirclesGrid(color, self.circles_size_2, flags=cv2.CALIB_CB_SYMMETRIC_GRID)
-        pose = np.eye(4, dtype=np.float32)
-        if is_found:
-            cv2.drawChessboardCorners(color_drawn, self.circles_size_2, centers, is_found)
-            _, rvec, tvec = cv2.solvePnP(self.circles_points_2, centers, self.C, self.coeffs)
-            cv2.aruco.drawAxis(color_drawn, self.C, self.coeffs, rvec, tvec, 0.054)
+            cv2.drawChessboardCorners(color_drawn, self.circle_board_size, centers, is_found)
+            _, rvec, tvec = cv2.solvePnP(self.circles_points, centers, self.C, self.coeffs)
+            cv2.aruco.drawAxis(color_drawn, self.C, self.coeffs, rvec, tvec, self.circle_size*self.circle_board_size[0])
             # calculate pose
             pose[0:3, 0:3] = cv2.Rodrigues(rvec)[0]
             pose[0:3, 3:4] = tvec
@@ -113,15 +104,8 @@ class D415:
         corners, ids, _ = cv2.aruco.detectMarkers(color_drawn, self.aruco_dict)
         cv2.aruco.drawDetectedMarkers(color_drawn, corners, ids)
         for i in range(len(corners)):
-            rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corners[i], 0.2, self.C_r, self.coeffs_r)
-            cv2.aruco.drawAxis(color_drawn, self.C_r, self.coeffs_r, rvec, tvec, 0.2)
-        return corners, ids, color, color_drawn
-
-    def detect_aruco_stuttgart(self):
-        color = self.get_frame_color()
-        color_drawn = color.copy()
-        corners, ids, _ = cv2.aruco.detectMarkers(color_drawn, cv2.aruco.custom_dictionary(10, 6))
-        cv2.aruco.drawDetectedMarkers(color_drawn, corners, ids)
+            rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corners[i], self.marker_size, self.C, self.coeffs)
+            cv2.aruco.drawAxis(color_drawn, self.C, self.coeffs, rvec, tvec, self.marker_size)
         return corners, ids, color, color_drawn
 
     # ==================================
@@ -168,3 +152,14 @@ def P(size, index):
         return np.array([[0.5*size], [-0.5*size], [0.], [1.]])
     if index == 3:
         return np.array([[-0.5*size], [-0.5*size], [0.], [1.]])
+
+
+def get_c2k(color, index, size, C, coeffs):
+    param = cv2.aruco.DetectorParameters_create()
+    param.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_APRILTAG
+    corners, ids, _ = cv2.aruco.detectMarkers(color, aruco_dict(), parameters=param)
+    for i in range(ids.shape[0]):
+        if ids[i, 0] == index:
+            rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corners[i], size, C, coeffs)
+            return f.t_4_4__rvec(rvec.reshape([3, ]), tvec.reshape([3, ]))
+    return None

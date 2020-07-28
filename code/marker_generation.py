@@ -1,5 +1,5 @@
 import cv2
-import libs.lib_rs as rs
+import libs.lib_rs_old as rs
 
 # generation
 dic = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_250)

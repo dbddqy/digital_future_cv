@@ -17,7 +17,7 @@ while True:
     if key == ord('s'):
         isToSave = True
     # fetch data
-    is_found, color, color_drawn, pose = d415.detect_circle_board_2()
+    is_found, color, color_drawn, pose = d415.detect_circle_board()
     cv2.imshow("color", color_drawn)
     # save data
     if isToSave and is_found:

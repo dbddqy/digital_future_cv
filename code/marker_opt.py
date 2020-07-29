@@ -108,14 +108,11 @@ for i in range(n):
     count_i_th_photo = len(corners_all[i])
     for j in range(6):
         A[np.arange(count_i_sum*8, count_i_sum*8+count_i_th_photo*8), i*6+j] = 1
-    index_m0 = indices.index(ids_all[i][0, 0]) - 1
-    index_m1 = indices.index(ids_all[i][1, 0]) - 1
-    if index_m0 != -1:
-        for j in range(6):
-            A[np.arange(count_i_sum*8, count_i_sum*8+count_i_th_photo*8), 6 * n + index_m0 * 6 + j] = 1
-    if index_m1 != -1:
-        for j in range(6):
-            A[np.arange(count_i_sum*8, count_i_sum*8+count_i_th_photo*8), 6 * n + index_m1 * 6 + j] = 1
+    for ids_i_th in ids_all[i][:, 0]:
+        index_i_th = indices.index(ids_i_th) - 1
+        if index_i_th != -1:
+            for j in range(6):
+                A[np.arange(count_i_sum*8, count_i_sum*8+count_i_th_photo*8), 6 * n + index_i_th * 6 + j] = 1
     count_i_sum += count_i_th_photo
 
 

@@ -9,7 +9,7 @@ with open("config\\config_marker.yml", 'r') as file:
 
 n = conf["num_photos"]   # number of photos
 m = conf["num_markers"]  # number of  markers
-path = conf["path"] + "marker_%d.png"
+path = conf["path"] + "color_%d.png"
 if conf["reorder"]:
     indices = conf["reorder_indices_list"]
 else:

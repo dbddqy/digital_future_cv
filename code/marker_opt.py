@@ -17,7 +17,7 @@ with open("config\\config_marker.yml", 'r') as file:
 
 n = conf["num_photos"]   # number of photos
 m = conf["num_markers"]  # number of  markers
-path = conf["path"] + "marker_%d.png"
+path = conf["path"] + "color_%d.png"
 if conf["reorder"]:
     indices = conf["reorder_indices_list"]
 else:
@@ -77,6 +77,9 @@ for i in range(n):
     param = cv2.aruco.DetectorParameters_create()
     param.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_APRILTAG
     corners, ids, _ = cv2.aruco.detectMarkers(color, rs.aruco_dict(), parameters=param)
+    # cv2.aruco.drawDetectedMarkers(color, corners, ids)
+    # cv2.imshow("color", color)
+    # cv2.waitKey()
     # if len(corners) != 2:
     #     continue
     corners_all.append(corners)
@@ -108,14 +111,11 @@ for i in range(n):
     count_i_th_photo = len(corners_all[i])
     for j in range(6):
         A[np.arange(count_i_sum*8, count_i_sum*8+count_i_th_photo*8), i*6+j] = 1
-    index_m0 = indices.index(ids_all[i][0, 0]) - 1
-    index_m1 = indices.index(ids_all[i][1, 0]) - 1
-    if index_m0 != -1:
-        for j in range(6):
-            A[np.arange(count_i_sum*8, count_i_sum*8+count_i_th_photo*8), 6 * n + index_m0 * 6 + j] = 1
-    if index_m1 != -1:
-        for j in range(6):
-            A[np.arange(count_i_sum*8, count_i_sum*8+count_i_th_photo*8), 6 * n + index_m1 * 6 + j] = 1
+    for ids_i_th in ids_all[i][:, 0]:
+        index_i_th = indices.index(ids_i_th) - 1
+        if index_i_th != -1:
+            for j in range(6):
+                A[np.arange(count_i_sum*8, count_i_sum*8+count_i_th_photo*8), 6 * n + index_i_th * 6 + j] = 1
     count_i_sum += count_i_th_photo
 
 
@@ -134,3 +134,9 @@ final_w2k.append(f.rvec6__t_4_4(np.eye(4)))
 for i in range(m-1):
     final_w2k.append(ls.x[6*(n + i): 6 * (n + i + 1)])
 np.save("w2k", final_w2k)
+np.savetxt("w2k.txt", final_w2k)
+
+final_w2c = []
+for i in range(n):
+    final_w2c.append(ls.x[6*i: 6*(i+1)])
+np.savetxt("c2w.txt", final_w2c)

@@ -12,6 +12,8 @@ from scipy.sparse import lil_matrix
 # T(W->K) (6*m)
 # ------------------------
 
+np.set_printoptions(precision=12, suppress=True)
+
 with open("config\\config_marker.yml", 'r') as file:
     conf = yaml.safe_load(file.read())
 
@@ -139,4 +141,4 @@ np.savetxt("w2k.txt", final_w2k)
 final_w2c = []
 for i in range(n):
     final_w2c.append(ls.x[6*i: 6*(i+1)])
-np.savetxt("c2w.txt", final_w2c)
+np.savetxt("c2w.txt", final_w2c, fmt='%.18f')

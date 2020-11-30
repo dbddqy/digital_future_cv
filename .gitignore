@@ -1,4 +1,8 @@
 installation/
+marker*
+color*
+wood*
+data_2D/circles
 
 __pycache__/
 .idea/
